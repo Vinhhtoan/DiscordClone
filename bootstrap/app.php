@@ -12,8 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'jwt.auth' => \App\Http\Middleware\JWTMiddleware::class,
-            'checklog' => \App\Http\Middleware\CheckLogin::class,
+            'jwt-handler' => \App\Http\Middleware\JWTHandler::class,
+        ]);
+        $middleware->priority([
+            \App\Http\Middleware\JWTHandler::class,
+            \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
+            \Illuminate\Auth\Middleware\Authorize::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

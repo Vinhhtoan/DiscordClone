@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Channel;
 use App\Models\Server;
+use App\Models\User;
 
 class ChannelController extends Controller
 {
     public function index($serverId, $ChannelId) {
         $servers = Server::find($serverId);
+        $userName = User::where('id', auth()->id())->first()->getAttributes()['name']; 
         $channels = Channel::where('server_id', $serverId)->get();
         $channelInfo = Channel::where('id',$ChannelId)->first();
         $userServers = Server::where('owner_id', auth()->id())->get();
@@ -24,6 +26,7 @@ class ChannelController extends Controller
             'channels' => $channels,
             'channelInfo' => $channelInfo,
             'userServers' => $userServers,
+            'userName' => $userName
         ]);
     }
     public function storage(Request $req, $serverId) {

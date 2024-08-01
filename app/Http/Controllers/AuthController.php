@@ -56,15 +56,18 @@ class AuthController extends Controller
     }
 
     public function postLogin(Request $req) {
-        if(Auth::attempt(['email'=> $req->email, 'password' => $req->password])) {
-            $req->session()->regenerate();
-            return redirect()->route('home');
+        $credentials = request(['email', 'password']);
+        if (! $token = auth()->attempt($credentials)) {
+            return redirect()->back()->withInput($req->only('email','name'))
+                ->withErrors(['email'=>'Invalid email or password']);        
         }
-        return redirect()->back()->withInput($req->only('email','name'))->withErrors(['email'=>'Invalid email or password']);
+        $cookie = cookie(env('JWT_COOKIE_KEY'), $token, 0, null, null, false, true);
+        return redirect()->route('home')->withCookie($cookie);
     }
 
     public function logout(Request $req){
         Auth::guard('web')->logout();
+        
         $req->session()->invalidate();
         $req->session()->regenerateToken();
         return redirect('/');

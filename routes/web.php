@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ServerController;
+use App\Http\Middleware\JWTHandler;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,7 +15,7 @@ Route::get('/registerform', [AuthController::class, 'RegisterView']);
 Route::post('/registerform', [AuthController::class, 'postRegister']);
 Route::post('/loginform', [AuthController::class, 'postLogin']);
 
-Route::middleware(['checklog'])->group(function () {
+Route::middleware(['auth','jwt-handler'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/servers/{serverId}/{channelId}',[ChannelController::class,'index'])->name('index');
     Route::get('/servers/{serverId}', [ServerController::class, 'index'])->name('servers.index');

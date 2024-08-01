@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Channel;
 use App\Models\Server;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,7 +12,7 @@ class ServerController extends Controller
 {
     public function index($serverId, Server $server) {
         $userServers = Server::where('owner_id', auth()->id())->get();
-     
+        $userName = User::where('id', auth()->id())->first()->getAttributes()['name']; 
         $servers = Server::find($serverId);
         if (!$servers) {
             abort(403);
@@ -21,7 +22,7 @@ class ServerController extends Controller
         }
         $channels = Channel::where('server_id', $serverId)->get();
         if ($channels->isEmpty()) {
-            return view('emptychannel',['serverId' => $serverId, 'servers'=>$servers, 'userServers'=>$userServers]);
+            return view('emptychannel',['serverId' => $serverId, 'servers'=>$servers, 'userServers'=>$userServers,'userName'=>$userName]);
         }
         $channel = $channels->first();
         return redirect()->route('index',['serverId'=>$servers->id,'channelId'=>$channel->id]);

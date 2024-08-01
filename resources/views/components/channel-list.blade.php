@@ -1,8 +1,9 @@
-@props(['channels','servers'])
-<div class="w-[240px] shrink-0 h-full  bg-[#2B2D31]">
+@props(['channels','servers','userName'])
+<div class="w-[240px] shrink-0 h-full  bg-[#2B2D31] relative">
     <div class="flex flex-col justify-between h-full">
         <div>
-            <div class="border-b-[1px] border-stone-900 shadow-sm flex justify-between items-center hover:bg-[#35373C]">
+            <x-dropdown />
+            <div x-data x-on:click="$dispatch('open-dropdown')" class="border-b-[1px] border-stone-900 shadow-sm flex justify-between items-center hover:bg-[#35373C]">
                 <h3 class="mx-4 my-3 text-white font-semibold text-[16px]">{{$servers->name}}</h3>
                 <button><svg class="my-3 mr-4 stroke-gray-300 w-5 h-5 hover:stroke-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg></button>
             </div>
@@ -31,7 +32,8 @@
                 @endforeach
                 <x-channel-manage.channel-format typeOfChannel="Voice"/>
         </div>
-        <x-channel-manage.user-settings />
+        <x-channel-manage.user-settings :userName="$userName"/>
+  
     </div>
 
 </div>

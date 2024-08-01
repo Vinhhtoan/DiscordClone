@@ -1,4 +1,4 @@
-
+@props(['servers','userName'])
 <div class="w-[240px] shrink-0  h-full  bg-[#2B2D31]">
     <div class="flex flex-col justify-between h-full">
         <div>
@@ -15,7 +15,7 @@
                 <x-channel-manage.channel-format typeOfChannel="Text" />
                 <x-channel-manage.channel-format typeOfChannel="Voice"/>
         </div>
-        <x-channel-manage.user-settings />
+        <x-channel-manage.user-settings :userName="$userName"/>
     </div>
 
 </div>
